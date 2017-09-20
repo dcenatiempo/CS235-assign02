@@ -66,7 +66,7 @@ int main()
          break;
       case 'b':
          cin.ignore();
-         //testInfixToAssembly();
+         testInfixToAssembly();
          break;
       case '1':
          testSimple();

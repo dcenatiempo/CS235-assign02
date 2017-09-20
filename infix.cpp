@@ -29,22 +29,27 @@ string convertInfixToPostfix(const string & infix)
    
    //Order: (), ^, * / %, + -
    
-   /*FOR iInfix 0 .. infix.size() – 1
-    SWITCH infix[iInfix]
-    CASE number or variable
-    postfix[iPostfix++] infix[iInfix]
-    CASE (
-    stack.push(infix[iInfix])
-    CASE )
-    WHILE stack.top() ≠ ( postfix[iPostfix++] stack.top() stack.pop()
-    stack.pop() DEFAULT
-    WHILE !stack.empty() &&
-    infix[iInfix] ≤ stack.top()  here ≤ understands the order of operations
-    postfix[iPostfix++] stack.top()
-    stack.pop(); stack.push(infix[iInfix])
-    WHILE not stack.empty()
-    postfix[iPostfix++] stack.top()
-    stack.pop()
+   /*
+    FOR iInfix <- 0 .. infix.size() – 1
+      SWITCH infix[iInfix]
+         CASE number or variable
+            postfix[iPostfix++] <- infix[iInfix]
+         CASE (
+            stack.push(infix[iInfix])
+         CASE )
+            WHILE stack.top() ≠ (
+               postfix[iPostfix++] <- stack.top()
+               stack.pop()
+            stack.pop()
+         DEFAULT
+            WHILE !stack.empty() &&
+                  infix[iInfix] ≤ stack.top() <- here ≤ understands the order of operations
+               postfix[iPostfix++] <- stack.top()
+               stack.pop();
+            stack.push(infix[iInfix])
+      WHILE not stack.empty()
+         postfix[iPostfix++] <- stack.top()
+         stack.pop()
     */
    
    return postfix;
@@ -109,8 +114,28 @@ void testInfixToPostfix()
 string convertPostfixToAssembly(const string & postfix)
 {
    string assembly;
-   
-   return assembly;
+   /*
+   postfixToAssembly(postfix, size)
+      FOR i = 0 .. size – 1
+         IF postfix[i] is a number or variable
+            stack.push(postfix[i])
+         ELSE
+            rhs <- stack.top()
+            stack.pop()
+            lhs <- stack.top()
+            stack.pop()
+            variable <- nextVariable++  <- Creates new variable names for later use
+            IF lhs.isVariable
+               assembly += “LOD ” + lhs
+            ELSE
+               assembly += “SET ” + lhs
+            assembly += postfix[i] + rhs
+            assembly += “SAV ” + variable
+    
+            stack.push(variable)
+      RETURN stack.top()
+    */
+   return "need to complete algorithm";//assembly;
 }
 
 /*****************************************************
