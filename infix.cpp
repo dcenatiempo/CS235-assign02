@@ -25,8 +25,27 @@ using namespace std;
 string convertInfixToPostfix(const string & infix)
 {
    string postfix;
+   postfix = "we still need to build this algorithm";
    
    //Order: (), ^, * / %, + -
+   
+   /*FOR iInfix 0 .. infix.size() – 1
+    SWITCH infix[iInfix]
+    CASE number or variable
+    postfix[iPostfix++] infix[iInfix]
+    CASE (
+    stack.push(infix[iInfix])
+    CASE )
+    WHILE stack.top() ≠ ( postfix[iPostfix++] stack.top() stack.pop()
+    stack.pop() DEFAULT
+    WHILE !stack.empty() &&
+    infix[iInfix] ≤ stack.top()  here ≤ understands the order of operations
+    postfix[iPostfix++] stack.top()
+    stack.pop(); stack.push(infix[iInfix])
+    WHILE not stack.empty()
+    postfix[iPostfix++] stack.top()
+    stack.pop()
+    */
    
    return postfix;
 }
@@ -54,45 +73,27 @@ custom::stack <char> convertStringToStack(const string & string)
  *****************************************************/
 void testInfixToPostfix()
 {
-   /*FOR iInfix 0 .. infix.size() – 1
-    SWITCH infix[iInfix]
-    CASE number or variable
-    postfix[iPostfix++] infix[iInfix]
-    CASE (
-    stack.push(infix[iInfix])
-    CASE )
-    WHILE stack.top() ≠ ( postfix[iPostfix++] stack.top() stack.pop()
-    stack.pop() DEFAULT
-    WHILE !stack.empty() &&
-    infix[iInfix] ≤ stack.top()  here ≤ understands the order of operations
-    postfix[iPostfix++] stack.top()
-    stack.pop(); stack.push(infix[iInfix])
-    WHILE not stack.empty()
-    postfix[iPostfix++] stack.top()
-    stack.pop()
-    */
-   
    string input;
    cout << "Enter an infix equation.  Type \"quit\" when done.\n";
    
    do
    {
+      // prompt for infix
+      cout << "infix > ";
+      getline(cin, input);
+      
       // handle errors
       if (cin.fail())
       {
          cin.clear();
          cin.ignore(256, '\n');
       }
-      
-      // prompt for infix
-      cout << "infix > ";
-      getline(cin, input);
-      
+            
       // generate postfix
       if (input != "quit")
       {
          string postfix = convertInfixToPostfix(input);
-         cout << "\tpostfix: " << postfix << endl << endl;
+         cout << "\t\tpostfix: " << postfix << endl << endl;
       }
    }
    while (input != "quit");

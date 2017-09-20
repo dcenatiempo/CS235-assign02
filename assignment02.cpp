@@ -61,7 +61,7 @@ int main()
    switch (choice)
    {
       case 'a':
-         //cin.ignore();
+         cin.ignore();
          testInfixToPostfix();
          break;
       case 'b':
