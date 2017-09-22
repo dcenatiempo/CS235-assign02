@@ -215,9 +215,9 @@ namespace custom
       //attempt to allocate memory
       this->data[numElements - 1] = data;
       
-      std::cerr << "elements = " << numElements << std::endl;
-      std::cerr << "capacity = " << numCapacity << std::endl;
-      std::cerr << "END PROCESSING STACK!\n";
+      //std::cerr << "elements = " << numElements << std::endl;
+      //std::cerr << "capacity = " << numCapacity << std::endl;
+      //std::cerr << "END PROCESSING STACK!\n";
       
       return;
    }

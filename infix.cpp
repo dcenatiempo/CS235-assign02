@@ -14,21 +14,144 @@
 #include <cassert>     // for ASSERT
 #include "stack.h"     // for STACK
 #include "infix.h"     // for INFIX
-using namespace std;
+#include <cctype>      // for isalpha isdigit isspace
+#include <sstream>     // for stringstream
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+using std::ostream;
+using std::ios;
+using std::stringstream;
+using std::cerr;
+//using namespace std;
+using namespace custom;
 
 //   https://content.byui.edu/file/fddcd57e-77ee-4853-a5ec-d787dd07d047/1/Ponder/235.02.Ponder.html
+
+/*******************************************
+ * DISPLAY
+ * Display the contents of the stack. We will
+ * assume that T is a data-type that has the
+ * insertion operator defined.
+ *******************************************/
+template <class T>
+ostream & operator << (ostream & out, stack <T> rhs) throw (const char *)
+{
+   // we need to make a copy of the stack that is backwards
+   stack <T> backwards;
+   while (!rhs.empty())
+   {
+      backwards.push(rhs.top());
+      rhs.pop();
+   }
+   
+   // now we will display this one
+   out << "{ ";
+   while (!backwards.empty())
+   {
+      out << backwards.top() << ' ';
+      backwards.pop();
+   }
+   out << '}';
+   
+   return out;
+   }
+
+
+
+
+/*****************************************************
+ * IS CHARACTER: ( ) ^ * / % + -
+ * Checks to see if character is one of these operators
+ *****************************************************/
+bool isOperator (const char a) {
+   char operators[] = "()^*/%+-";
+   for (int i = 0; i < 8; i++) {
+      if (a == operators[i])
+         return true;
+   }
+   return false;
+}
+
+/*****************************************************
+ * CONVERT STRING TO STACK
+ * Convert each word or number in a string
+ * into a stack, for better processing.
+ *****************************************************/
+custom::stack <string> convertStringToStack(const string str)
+{
+   
+   custom::stack <string> tempStack;
+   custom::stack <string> revStack;
+   int i = 0;
+   // traverse through the string, processing each word
+   while ( i < str.length() ) {
+      if ( isspace( str[i]) ) {
+         i++;
+      }
+      else if ( isalpha( str[i] ) ) {
+         string tempString;
+         stringstream ss;
+         //push variable to stack
+         for ( ; i < str.length() && isalpha( str[i] ); i++ ){
+            ss << str[i];
+         }
+         ss >> tempString;
+         tempStack.push( tempString );
+      }
+      else if ( ( str[i] == '-' && isdigit( str[i+1] ) ) || isdigit( str[i] ) ) {
+         string tempString;
+         stringstream ss;
+         //push number to stack
+         ss << str[i];
+         i++;
+         for ( ; i < str.length() && ( isdigit( str[i] ) || str[i] == '.'); i++ ){
+            ss << str[i];
+         }
+         ss >> tempString;
+         tempStack.push( tempString );
+      }
+      else if ( isOperator( str[i]) ){
+         string tempString;
+         stringstream ss;
+         // push operator to stack
+         ss << str[i];
+         ss >> tempString;
+         tempStack.push( tempString );
+         i++;
+      }
+      else cerr << "Invalid Infix";
+   }
+   cout << tempStack;
+   int size = tempStack.size();
+   for (int i = 0; i < size; i++) {
+      revStack.push (tempStack.top());
+      tempStack.pop();
+   }
+   cout << revStack;
+   return revStack;
+}
 
 /*****************************************************
  * CONVERT INFIX TO POSTFIX
  * Convert infix equation "5 + 2" into postfix "5 2 +"
  *****************************************************/
-string convertInfixToPostfix(const string & infix)
+string convertInfixToPostfix(const string infix)
 {
    string postfix;
-   postfix = "we still need to build this algorithm";
+   custom::stack <string> reverseInfix( convertStringToStack(infix) );
+   //custom::stack <string> tempStack;
+   //cout << reverseInfix;
+
+   
    
    //Order: (), ^, * / %, + -
    
+   //for ( int i = 0; i < reverseInfix.size(); i++) {
+      
+            
+   //   }
    /*
     FOR iInfix <- 0 .. infix.size() – 1
       SWITCH infix[iInfix]
@@ -53,22 +176,6 @@ string convertInfixToPostfix(const string & infix)
     */
    
    return postfix;
-}
-
-/*****************************************************
- * CONVERT STRING TO STACK
- * Convert each word or number in a string
- * into a stack, for better processing.
- *****************************************************/
-custom::stack <char> convertStringToStack(const string & string)
-{
-   custom::stack<char> stack;
-   
-   // loops through the string, processing each word
-   
-   // if word is a space, do not put it into the stack
-   
-   return stack;
 }
 
 /*****************************************************
@@ -113,7 +220,9 @@ void testInfixToPostfix()
  **********************************************/
 string convertPostfixToAssembly(const string & postfix)
 {
+
    string assembly;
+
    /*
    postfixToAssembly(postfix, size)
       FOR i = 0 .. size – 1
