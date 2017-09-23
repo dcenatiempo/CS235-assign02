@@ -16,6 +16,7 @@
 #include "infix.h"     // for INFIX
 #include <cctype>      // for isalpha isdigit isspace
 #include <sstream>     // for stringstream
+#include <vector>
 using std::cout;
 using std::cin;
 using std::endl;
@@ -24,6 +25,7 @@ using std::ostream;
 using std::ios;
 using std::stringstream;
 using std::cerr;
+using std::vector;
 //using namespace std;
 using namespace custom;
 
@@ -100,11 +102,11 @@ int orderOfOperators(char op){
  * Convert each word or number in a string
  * into a stack, for better processing.
  *****************************************************/
-custom::stack <string> convertStringToStack(const string str)
+stack <string> convertStringToStack(const string str)
 {
    
-   custom::stack <string> tempStack;
-   custom::stack <string> revStack;
+   stack <string> tempStack;
+   stack <string> revStack;
    int i = 0;
    // traverse through the string, processing each word
    while ( i < str.length() ) {
@@ -154,50 +156,7 @@ custom::stack <string> convertStringToStack(const string str)
    return revStack;
 }
 
-/*****************************************************
- * CONVERT INFIX TO POSTFIX
- * Convert infix equation "5 + 2" into postfix "5 2 +"
- *****************************************************/
-string convertInfixToPostfix(const string infix)
-{
-   string postfix;
-   custom::stack <string> reverseInfix( convertStringToStack(infix) );
-   //custom::stack <string> tempStack;
-   //cout << reverseInfix;
 
-   
-   
-   //Order: (), ^, * / %, + -
-   
-   //for ( int i = 0; i < reverseInfix.size(); i++) {
-      
-            
-   //   }
-   /*
-    FOR iInfix <- 0 .. infix.size() – 1
-      SWITCH infix[iInfix]
-         CASE number or variable
-            postfix[iPostfix++] <- infix[iInfix]
-         CASE (
-            stack.push(infix[iInfix])
-         CASE )
-            WHILE stack.top() ≠ (
-               postfix[iPostfix++] <- stack.top()
-               stack.pop()
-            stack.pop()
-         DEFAULT
-            WHILE !stack.empty() &&
-                  infix[iInfix] ≤ stack.top() <- here ≤ understands the order of operations
-               postfix[iPostfix++] <- stack.top()
-               stack.pop();
-            stack.push(infix[iInfix])
-      WHILE not stack.empty()
-         postfix[iPostfix++] <- stack.top()
-         stack.pop()
-    */
-   
-   return postfix;
-}
 
 /*****************************************************
  * CONVERT INFIX TO POSTFIX
@@ -205,37 +164,46 @@ string convertInfixToPostfix(const string infix)
  *****************************************************/
 string convertInfixToPostfix(const string & infix)
 {
-   string postfix;
+   vector <string> postfix;
+   stack <string> reverseInfix( convertStringToStack(infix) );
    // stack for the operators
-   stack <char> op;
-   for (int i = 0; i < infix.size(); i++){
-       if (isdigit(infix[i])){
-           postfix += infix[i];
+   stack <string> op;
+   int size = reverseInfix.size();
+   for (int i = 0; i < size; i++){
+      string tempStr = reverseInfix.top();
+      if ( tempStr.length() > 1 || isdigit(tempStr[0]) || isalpha(tempStr[0]) ){
+           postfix.push_back(tempStr);
        }
-       else if (infix[i] == '('){
-           op.push(infix[i]);
+       else if (tempStr[0] == '('){
+           op.push(tempStr);
        }
-       else if (infix[i] == ')'){
-           while (op.top() != '('){
-               postfix += op.top();
+       else if (tempStr[0] == ')'){
+           while (op.top()[0] != '('){
+               postfix.push_back(op.top());
                op.pop();
            }
            op.pop();
        }
        else{
-           while (!op.empty() && orderOfOperators(infix[i]) < orderOfOperators(op.top())){
-               postfix += op.top();
+           while (!op.empty() && orderOfOperators(tempStr[0]) < orderOfOperators(op.top()[0])){
+               postfix.push_back( op.top());
                op.pop();
            }
-           op.push(infix[i]);
+           op.push(tempStr);
        }
-       
+      reverseInfix.pop();
    }
    while (!op.empty()){
-       postfix += op.top();
+       postfix.push_back(op.top());
        op.pop();
    }
-   return postfix;
+   string postfixStr = "";
+   for (int i = 0; i < postfix.size(); i++) {
+      postfixStr += postfix[i];
+      if ( i < postfix.size() - 1)
+         postfixStr += " ";
+   }
+   return postfixStr;
 }
 
 /*****************************************************
