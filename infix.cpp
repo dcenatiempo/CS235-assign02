@@ -117,13 +117,13 @@ stack <string> convertStringToStack(const string str)
          string tempString;
          stringstream ss;
          //push variable to stack
-         for ( ; i < str.length() && isalpha( str[i] ); i++ ){
+         for ( ; i < str.length() && !isOperator( str[i] ); i++ ){
             ss << str[i];
          }
          ss >> tempString;
          tempStack.push( tempString );
       }
-      else if ( ( str[i] == '-' && isdigit( str[i+1] ) ) || isdigit( str[i] ) ) {
+      else if ( isdigit( str[i] ) || ( str[i] == '-' && isdigit( str[i+1] ) ) || ( str[i] == '.' && isdigit( str[i+1] ) ) ) {
          string tempString;
          stringstream ss;
          //push number to stack
@@ -144,15 +144,18 @@ stack <string> convertStringToStack(const string str)
          tempStack.push( tempString );
          i++;
       }
-      else cerr << "Invalid Infix";
+      else {
+         cerr << "Invalid Infix ";
+         i++;
+      }
    }
-   cout << tempStack;
+   //cout << tempStack;
    int size = tempStack.size();
    for (int i = 0; i < size; i++) {
       revStack.push (tempStack.top());
       tempStack.pop();
    }
-   cout << revStack;
+   //cout << revStack;
    return revStack;
 }
 
@@ -185,7 +188,7 @@ string convertInfixToPostfix(const string & infix)
            op.pop();
        }
        else{
-           while (!op.empty() && orderOfOperators(tempStr[0]) < orderOfOperators(op.top()[0])){
+           while (!op.empty() && orderOfOperators(tempStr[0]) <= orderOfOperators(op.top()[0])){
                postfix.push_back( op.top());
                op.pop();
            }
@@ -197,7 +200,7 @@ string convertInfixToPostfix(const string & infix)
        postfix.push_back(op.top());
        op.pop();
    }
-   string postfixStr = "";
+   string postfixStr = " ";
    for (int i = 0; i < postfix.size(); i++) {
       postfixStr += postfix[i];
       if ( i < postfix.size() - 1)
@@ -233,7 +236,7 @@ void testInfixToPostfix()
       if (input != "quit")
       {
          string postfix = convertInfixToPostfix(input);
-         cout << "\t\tpostfix: " << postfix << endl << endl;
+         cout << "\tpostfix: " << postfix << endl << endl;
       }
    }
    while (input != "quit");
@@ -282,6 +285,8 @@ string convertPostfixToAssembly(const string & postfix)
  *****************************************************/
 void testInfixToAssembly()
 {
+   cout << "not implemented yet";
+   /*
    string input;
    cout << "Enter an infix equation.  Type \"quit\" when done.\n";
    
@@ -306,6 +311,6 @@ void testInfixToAssembly()
       }
    }
    while (input != "quit");
-   
+   */
 }
 
