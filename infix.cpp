@@ -123,8 +123,9 @@ custom::stack <string> convertStringToStack(const string str)
       }
       else cerr << "Invalid Infix";
    }
-   cout << tempStack;
+   //cout << tempStack;
    int size = tempStack.size();
+   // reverse stack
    for (int i = 0; i < size; i++) {
       revStack.push (tempStack.top());
       tempStack.pop();
