@@ -143,7 +143,7 @@ namespace custom
       numCapacity = rhs.numCapacity;
       
       // copy the items over one at a time using the assignment operator
-      for (int i = 0; i < numCapacity; i++)
+      for (int i = 0; i < numElements; i++)
          data[i] = rhs.data[i];
          }
    
@@ -197,7 +197,7 @@ namespace custom
             T * tempData = new T[numCapacity];
             
             // copy data to a new, larger array
-            for (int i = 0; i < numElements - 1; i++)
+            for (int i = 0; i < numElements -1; i++)
             {
                tempData[i] = this->data[i];
             }
@@ -252,7 +252,7 @@ namespace custom
    {
       // if the stack is empty, throw an error.
       if(numElements == 0 || numCapacity <= 0)
-         throw "ERROR: Unable to reference the element from an empty stack\n";
+         throw "ERROR: Unable to reference the element from an empty Stack";
       
       return data[numElements-1];
    }
@@ -270,7 +270,7 @@ namespace custom
    {
       // if the stack is empty, throw an error.
       if(numElements == 0 || numCapacity <= 0)
-         throw "ERROR: Unable to reference the element from an empty stack\n";
+         throw "ERROR: Unable to reference the element from an empty Stack";
       
       return data[numElements-1];
    }
