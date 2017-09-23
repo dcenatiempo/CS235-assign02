@@ -301,7 +301,7 @@ void testErrors()
    try
    {
       s.pop();
-      cout << "\tCorrect! When we pop() with an empty stack, "
+      cout << "\tCorrect! When we pop() with an empty Stack, "
            << "nothing bad happens.\n";
    }
    catch (const char * error)
