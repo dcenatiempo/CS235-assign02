@@ -56,11 +56,7 @@ ostream & operator << (ostream & out, stack <T> rhs) throw (const char *)
    out << '}';
    
    return out;
-   }
-
-
-
-
+}
 /*****************************************************
  * IS CHARACTER: ( ) ^ * / % + -
  * Checks to see if character is one of these operators
@@ -72,6 +68,31 @@ bool isOperator (const char a) {
          return true;
    }
    return false;
+}
+
+/**********************************
+ * Return the operator prioroty number
+***********************************/
+int orderOfOperators(char op){
+    switch(op){
+        case '+':
+            return 1;
+            break;
+        case '-':
+            return 1;
+            break;
+        case '*':
+            return 2;
+            break;
+        case '/':
+            return 2;
+            break;
+        case '^':
+            return 3;
+            break;
+            
+    }
+    return 0;
 }
 
 /*****************************************************
@@ -175,6 +196,45 @@ string convertInfixToPostfix(const string infix)
          stack.pop()
     */
    
+   return postfix;
+}
+
+/*****************************************************
+ * CONVERT INFIX TO POSTFIX
+ * Convert infix equation "5 + 2" into postifx "5 2 +"
+ *****************************************************/
+string convertInfixToPostfix(const string & infix)
+{
+   string postfix;
+   // stack for the operators
+   stack <char> op;
+   for (int i = 0; i < infix.size(); i++){
+       if (isdigit(infix[i])){
+           postfix += infix[i];
+       }
+       else if (infix[i] == '('){
+           op.push(infix[i]);
+       }
+       else if (infix[i] == ')'){
+           while (op.top() != '('){
+               postfix += op.top();
+               op.pop();
+           }
+           op.pop();
+       }
+       else{
+           while (!op.empty() && orderOfOperators(infix[i]) < orderOfOperators(op.top())){
+               postfix += op.top();
+               op.pop();
+           }
+           op.push(infix[i]);
+       }
+       
+   }
+   while (!op.empty()){
+       postfix += op.top();
+       op.pop();
+   }
    return postfix;
 }
 
